@@ -42,7 +42,7 @@ body {
     border: 0;
 }
 
-/* CSS Animated Background - replaces Vanta.js (saves ~620KB JS) */
+/* CSS Animated Background — floating orbs + gradient drift */
 #animated-bg {
     position: fixed;
     top: 0;
@@ -50,10 +50,86 @@ body {
     width: 100%;
     height: 100%;
     z-index: 0;
-    background:
-        radial-gradient(ellipse at 20% 50%, rgba(0, 123, 255, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(0, 123, 255, 0.06) 0%, transparent 50%),
-        linear-gradient(135deg, #f0f4f8 0%, #e8edf2 50%, #f0f4f8 100%);
+    background: linear-gradient(135deg, #e8edf5 0%, #f0f4f8 40%, #e2e9f0 100%);
+    overflow: hidden;
+}
+
+#animated-bg::before,
+#animated-bg::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+    will-change: transform;
+}
+
+#animated-bg::before {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 123, 255, 0.18) 0%, transparent 70%);
+    top: -10%;
+    left: -5%;
+    animation: floatOrb1 18s ease-in-out infinite alternate;
+}
+
+#animated-bg::after {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0, 91, 230, 0.14) 0%, transparent 70%);
+    bottom: -10%;
+    right: -5%;
+    animation: floatOrb2 22s ease-in-out infinite alternate;
+}
+
+/* Third orb via a child element created in HTML */
+.bg-orb {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(100, 150, 255, 0.12) 0%, transparent 70%);
+    filter: blur(50px);
+    top: 40%;
+    left: 50%;
+    animation: floatOrb3 20s ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+@keyframes floatOrb1 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(80px, 60px) scale(1.1); }
+    100% { transform: translate(40px, 120px) scale(0.95); }
+}
+
+@keyframes floatOrb2 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-60px, -80px) scale(1.15); }
+    100% { transform: translate(-30px, -40px) scale(0.9); }
+}
+
+@keyframes floatOrb3 {
+    0%   { transform: translate(-50%, 0) scale(1); }
+    50%  { transform: translate(-30%, -60px) scale(1.1); }
+    100% { transform: translate(-70%, 40px) scale(0.95); }
+}
+
+/* Dot grid overlay for texture */
+.bg-dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, rgba(0, 123, 255, 0.12) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: dotsDrift 30s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes dotsDrift {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(40px, 40px); }
 }
 
 /* SVG icon styling */
